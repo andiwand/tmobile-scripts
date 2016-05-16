@@ -38,7 +38,6 @@ def fetch(username, password):
 
 	driver.get("https://rechnung.t-mobile.at/index.cfm")
 
-	driver.find_element_by_name("asdf")
 	form_username = driver.find_element_by_name("account")
 	form_password = driver.find_element_by_name("password")
 
