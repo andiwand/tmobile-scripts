@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 
 import sys
+import codecs
 import argparse
 import pool
 
@@ -24,6 +25,9 @@ def message(resource, warning, critical):
 	msg += "%s of \"%s\" already used. (%d / %d %s)" % (percent, resource[0], resource[1], resource[2], resource[3])
 	return code, msg
 
+sys.stdout = codecs.getwriter("utf8")(sys.stdout.detach())
+sys.stderr = codecs.getwriter("utf8")(sys.stderr.detach())
+
 parser = argparse.ArgumentParser(description="Check T-Mobile pool quota.")
 parser.add_argument("-u", "--username", required=True, help="username")
 parser.add_argument("-p", "--password", required=True, help="password")
@@ -44,7 +48,7 @@ result = 0
 
 for resource in resources:
 	c, m = message(resource, warning, critical)
-	print(m.encode("utf-8"))
+	print(m)
 	if c > result: result = c
 
 sys.exit(result)
