@@ -44,7 +44,7 @@ result = 0
 
 for resource in resources:
 	c, m = message(resource, warning, critical)
-	print(m)
+	print(m.encode("utf-8"))
 	if c > result: result = c
 
 sys.exit(result)
