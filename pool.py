@@ -56,7 +56,7 @@ def fetch(username, password):
 		resource = parse_resource(cell[2].text)
 		used = parse_number(cell[3].text)
 		free = parse_number(cell[5].text)
-		result[resource[0].lower()] = {"used": used[0], "limit": used[0] + free[0], "unit": used[1]}
+		result[resource[0]] = {"used": used[0], "limit": used[0] + free[0], "unit": used[1]}
 
 	driver.close()
 	return result

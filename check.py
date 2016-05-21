@@ -1,4 +1,5 @@
 #!/usr/bin/python3
+# -*- coding: utf-8 -*-
 
 import os
 import sys
@@ -7,7 +8,7 @@ import argparse
 import tempfile
 import json
 
-import single
+import personal
 import pool
 
 def p2f(s):
@@ -55,12 +56,23 @@ def cache_write(username, path, resources):
 		pass
 	data.update({username: resources})
 	with open(path, "w") as f:
-		json.dump(data, f)
+		json.dump(data, f, sort_keys=True, indent=4)
 
 def check(username, password, account):
 	if account == "pool": return pool.fetch(username, password)
-	elif account == "personal":return single.fetch(username, password) 
+	elif account == "personal":return personal.fetch(username, password) 
 	return None
+
+def fix_key(s):
+	s = s.replace("ä", "ae")
+	s = s.replace("ö", "oe")
+	s = s.replace("ü", "ue")
+	s = s.replace("ß", "ss")
+	s = s.lower()
+	return s
+
+def fix_keys(d):
+	return {fix_key(k): v for k, v in d.items()}
 
 parser = argparse.ArgumentParser(description="Check T-Mobile quota.")
 parser.add_argument("-u", "--username", help="username to login", required=True)
@@ -87,6 +99,7 @@ if not cache_values:
 	except:
 		print("UNKNOWN - malformed website or timeout")
 		sys.exit(3)
+	resources = fix_keys(resources)
 	if args.use_cache:
 		cache_write(args.username, args.cache_file, resources)
 

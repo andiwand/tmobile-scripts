@@ -35,7 +35,7 @@ def fetch(username, password):
 		resource = parse_resource(row.find_element_by_class_name("title").text)
 		used = parse_number(row.find_element_by_class_name("used").text)
 		limit = parse_number(row.find_element_by_class_name("total").text)
-		result[resource.lower()] = {"used": used, "limit": limit}
+		result[resource] = {"used": used, "limit": limit}
 
 	driver.close()
 	return result
