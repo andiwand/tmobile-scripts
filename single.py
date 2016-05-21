@@ -14,7 +14,7 @@ def parse_number(s):
 	return int(s)
 
 def fetch(username, password):
-	result = []
+	result = {}
 
 	driver = webdriver.PhantomJS(service_log_path=os.path.devnull)
 	driver.implicitly_wait(10)
@@ -35,7 +35,7 @@ def fetch(username, password):
 		resource = parse_resource(row.find_element_by_class_name("title").text)
 		used = parse_number(row.find_element_by_class_name("used").text)
 		limit = parse_number(row.find_element_by_class_name("total").text)
-		result.append((resource, used, limit))
+		result[resource.lower()] = {"used": used, "limit": limit}
 
 	driver.close()
 	return result

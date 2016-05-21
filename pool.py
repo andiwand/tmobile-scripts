@@ -31,7 +31,7 @@ def parse_number(s):
 	return int(s), unit
 
 def fetch(username, password):
-	result = []
+	result = {}
 
 	driver = webdriver.PhantomJS(service_log_path=os.path.devnull)
 	driver.implicitly_wait(10)
@@ -56,7 +56,7 @@ def fetch(username, password):
 		resource = parse_resource(cell[2].text)
 		used = parse_number(cell[3].text)
 		free = parse_number(cell[5].text)
-		result.append((resource[0], used[0], used[0] + free[0], used[1]))
+		result[resource[0].lower()] = {"used": used[0], "limit": used[0] + free[0], "unit": used[1]}
 
 	driver.close()
 	return result
