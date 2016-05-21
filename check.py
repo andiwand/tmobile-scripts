@@ -35,7 +35,9 @@ def cache():
 
 def cache_read(username, path, timeout):
 	if not os.path.isfile(path): return None
-	if time.time() - os.path.getmtime(path) > timeout: return None
+	if time.time() - os.path.getmtime(path) > timeout:
+		os.remove(path)
+		return None
 	try:
 		with open(path) as f:
 			data = json.load(f)
