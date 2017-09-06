@@ -36,9 +36,8 @@ def cache():
 
 def cache_read(username, path, timeout):
 	if not os.path.isfile(path): return None
-	if time.time() - os.path.getmtime(path) > timeout:
-		os.remove(path)
-		return None
+	# TODO: verify timeout in data
+	if time.time() - os.path.getmtime(path) > timeout: return None
 	try:
 		with open(path) as f:
 			data = json.load(f)
@@ -81,19 +80,20 @@ parser.add_argument("-a", "--account", help="account type (e.g. personal, pool)"
 parser.add_argument("--use-cache", help="activate cache mode", action="store_true")
 parser.add_argument("--cache-file", help="cache file to user", default=cache())
 parser.add_argument("--cache-timeout", help="cache timeout in seconds", type=int, default=60)
+parser.add_argument("--fetch", help="just fetch data into chache", action="store_true")
 parser.add_argument("-v", "--verbose", help="activate verbose mode", action="store_true")
 parser.add_argument("-r", "--resource", help="resource to check")
 parser.add_argument("-w", "--warning", help="warning percentage", default="80%")
 parser.add_argument("-c", "--critical", help="critical percentage", default="90%")
 
 args = parser.parse_args()
-cache_values = False
+fetch = True
 
 if args.use_cache:
 	resources = cache_read(args.username, args.cache_file, args.cache_timeout)
-	if resources: cache_values = True
+	if resources: fetch = False
 
-if not cache_values:
+if fetch:
 	try:
 		resources = check(args.username, args.password, args.account)
 	except:
@@ -102,6 +102,10 @@ if not cache_values:
 	resources = fix_keys(resources)
 	if args.use_cache:
 		cache_write(args.username, args.cache_file, resources)
+
+if args.fetch:
+    print("OK - data fetched into cache")
+    sys.exit(0)
 
 warning = p2f(args.warning)
 critical = p2f(args.critical)
