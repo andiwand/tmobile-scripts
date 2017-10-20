@@ -32,8 +32,10 @@ def parse_number(s):
 
 def fetch(username, password):
 	result = {}
-
-	driver = webdriver.PhantomJS(service_log_path=os.path.devnull)
+	
+	driver = webdriver.PhantomJS(
+		service_args=["--ignore-ssl-errors=true"],
+		service_log_path=os.path.devnull)
 	driver.implicitly_wait(10)
 
 	driver.get("https://rechnung.t-mobile.at/index.cfm")
