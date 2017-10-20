@@ -36,7 +36,7 @@ def fetch(username, password):
 	driver = webdriver.PhantomJS(service_log_path=os.path.devnull)
 	driver.implicitly_wait(10)
 
-	driver.get("https://rechnung.t-mobile.at/index.cfm")
+	driver.get("https://rechnung.t-mobile.at/vpn/")
 
 	form_username = driver.find_element_by_name("account")
 	form_password = driver.find_element_by_name("password")
